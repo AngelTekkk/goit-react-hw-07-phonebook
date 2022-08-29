@@ -7,11 +7,6 @@ import s from './ContactList.module.css';
 export default function ContactList({ visibleContacts }) {
   const [deleteContact] = useDeleteContactMutation();
 
-  const onDeleteContact = (id, name) => {
-    Notify.info(`${name} is deleted from contacts.`);
-    deleteContact(id, name);
-  };
-
   return (
     <ul className={s.list}>
       {visibleContacts &&

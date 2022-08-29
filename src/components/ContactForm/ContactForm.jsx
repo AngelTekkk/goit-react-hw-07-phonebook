@@ -9,8 +9,7 @@ export default function ContactForm({ contacts }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const [addContact, { isLoading, isError, isSuccess }] =
-    useCreateContactMutation();
+  const [addContact, { isLoading }] = useCreateContactMutation();
 
   const handleChange = ({ target: { name, value } }) => {
     switch (name) {
