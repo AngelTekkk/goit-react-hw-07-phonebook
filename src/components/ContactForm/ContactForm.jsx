@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Notify } from 'notiflix';
 import { Blocks } from 'react-loader-spinner';
 import s from './ContactForm.module.css';
@@ -82,3 +83,14 @@ export default function ContactForm({ contacts }) {
     </form>
   );
 }
+
+ContactForm.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      createdAt: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      phone: PropTypes.string.isRequired,
+    })
+  ),
+};

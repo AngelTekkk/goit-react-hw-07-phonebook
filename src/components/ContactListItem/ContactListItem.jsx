@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useDeleteContactMutation } from '../../redux';
 import { Blocks } from 'react-loader-spinner';
 import { Notify } from 'notiflix';
@@ -30,3 +31,12 @@ export default function ContactListItem({ contact: { id, name, phone } }) {
     </>
   );
 }
+
+ContactListItem.propTypes = {
+  contacts: PropTypes.shape({
+    createdAt: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    phone: PropTypes.string.isRequired,
+  }),
+};
