@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import contactsActions from 'redux/contacts/contactActions';
 import { Notify } from 'notiflix';
+import { Blocks } from 'react-loader-spinner';
 import s from './ContactForm.module.css';
-import { getContacts } from 'redux/contacts/contactSelectors';
 
-export default function ContactForm() {
+import { useCreateContactMutation } from '../../redux';
+
+export default function ContactForm({ contacts }) {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contacts = useSelector(getContacts);
-  const dispatch = useDispatch();
-  const onAddContact = (name, number) =>
-    dispatch(contactsActions.addContact(name, number));
+
+  const [addContact, { isLoading, isError, isSuccess }] =
+    useCreateContactMutation();
 
   const handleChange = ({ target: { name, value } }) => {
     switch (name) {
@@ -31,7 +30,7 @@ export default function ContactForm() {
     const isNameAlreadyAdded = contacts.find(
       c => c.name.toLowerCase() === name.toLowerCase()
     );
-    const isNumberAlreadyAdded = contacts.find(c => c.number === number);
+    const isNumberAlreadyAdded = contacts.find(c => c.phone === number);
     if (isNameAlreadyAdded || isNumberAlreadyAdded) {
       isNameAlreadyAdded && Notify.failure(`${name} is already in contacts.`);
       isNumberAlreadyAdded &&
@@ -40,7 +39,7 @@ export default function ContactForm() {
         );
     } else {
       Notify.success(`${name} is added to contacts.`);
-      onAddContact(name, number);
+      addContact({ name, number });
     }
     reset();
   };
@@ -78,8 +77,8 @@ export default function ContactForm() {
           onChange={handleChange}
         />
       </label>
-      <button type="submit" className={s.button}>
-        Add contact
+      <button type="submit" className={s.button} disabled={isLoading}>
+        {isLoading ? <Blocks height={40} /> : 'Add contact'}
       </button>
     </form>
   );

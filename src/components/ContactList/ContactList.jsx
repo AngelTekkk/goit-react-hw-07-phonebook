@@ -1,38 +1,23 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getVisibleContacts } from 'redux/contacts/contactSelectors';
+import { useDeleteContactMutation } from '../../redux';
 import { Notify } from 'notiflix';
-import contactsActions from 'redux/contacts/contactActions';
+import ContactListItem from 'components/ContactListItem/ContactListItem';
 import s from './ContactList.module.css';
 
-export default function ContactList() {
-  const dispatch = useDispatch();
-
-  const visibleContacts = useSelector(getVisibleContacts);
+export default function ContactList({ visibleContacts }) {
+  const [deleteContact] = useDeleteContactMutation();
 
   const onDeleteContact = (id, name) => {
     Notify.info(`${name} is deleted from contacts.`);
-    dispatch(contactsActions.removeContact(id));
+    deleteContact(id, name);
   };
 
   return (
     <ul className={s.list}>
-      {visibleContacts.map(({ id, name, number }) => {
-        return (
-          <li key={id} className={s.item}>
-            <p>
-              {name}: {number}
-            </p>
-            <button
-              className={s.button}
-              type="button"
-              onClick={() => onDeleteContact(id, name)}
-            >
-              Delete
-            </button>
-          </li>
-        );
-      })}
+      {visibleContacts &&
+        visibleContacts.map(({ id, name, phone }) => {
+          return <ContactListItem key={id} contact={{ id, name, phone }} />;
+        })}
     </ul>
   );
 }
